@@ -15,7 +15,7 @@ func check(e error) {
 }
 
 func main() {
-    file_raw, err := ioutil.ReadFile("input.txt")
+    file_raw, err := ioutil.ReadFile("../../inputs/3/input.txt")
     check(err)
     paths_str := strings.Split(string(file_raw), "\n")
     paths := make([][][2]int, len(paths_str))
@@ -56,7 +56,6 @@ func main() {
                 }
             }
 
-            paths[i] = append(paths[i], next)
             last = next
         }
     }

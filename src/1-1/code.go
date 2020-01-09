@@ -15,7 +15,7 @@ func check(e error) {
 }
 
 func main() {
-	file_raw, err := ioutil.ReadFile("input.txt")
+	file_raw, err := ioutil.ReadFile("../../inputs/1/input.txt")
     check(err)
     lines := strings.Split(string(file_raw), "\n")
 
@@ -27,5 +27,5 @@ func main() {
         }
     }
 
-    fmt.Printf("%d", total);
+    fmt.Printf("%d\n", total);
 }

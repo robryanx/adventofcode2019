@@ -5,6 +5,7 @@ import (
     "io/ioutil"
     "strings"
     "strconv"
+    "intcode"
 )
 
 func check(e error) {
@@ -16,7 +17,7 @@ func check(e error) {
 func main() {
     var codes []int;
 
-    file_raw, err := ioutil.ReadFile("input.txt")
+    file_raw, err := ioutil.ReadFile("../../inputs/2/input.txt")
     check(err)
     opcodes_str := strings.Split(string(file_raw), ",")
     for i := 0; i<len(opcodes_str); i++ {
@@ -39,31 +40,11 @@ func main() {
             run_codes := make([]int, len(codes))
             copy(run_codes, codes)
 
-            if goal == run_computer(run_codes) {
+            if goal == intcode.Run_computer(run_codes, 0) {
                 answer = (i*100) + j
             }
         }
     }
 
-    fmt.Printf("%d", answer);
-}
-
-func run_computer(codes []int) int {
-    opcode_loop:for i := 0; i<len(codes); i+=4 {
-        fmt.Printf("%d - %d\n", i, codes[i]);
-
-        switch codes[i] {
-            case 99:
-                break opcode_loop;
-            case 1:
-                codes[codes[i+3]] = codes[codes[i+1]] + codes[codes[i+2]]
-            case 2:
-                codes[codes[i+3]] = codes[codes[i+1]] * codes[codes[i+2]]
-            default:
-                fmt.Printf("invalid opcode %d\n", codes[i])
-                break;
-        }
-    }
-
-    return codes[0]
+    fmt.Printf("%d\n", answer);
 }
