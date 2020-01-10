@@ -1,5 +1,2 @@
-**/*
-!**/*.go
-!**/
-!.gitignore
-!**/*.txt
+bin
+pkg

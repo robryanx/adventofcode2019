@@ -17,7 +17,7 @@ func check(e error) {
 func main() {
     var codes []int;
 
-    file_raw, err := ioutil.ReadFile("../../inputs/2/input.txt")
+    file_raw, err := ioutil.ReadFile("../inputs/2/input.txt")
     check(err)
     opcodes_str := strings.Split(string(file_raw), ",")
     for i := 0; i<len(opcodes_str); i++ {
