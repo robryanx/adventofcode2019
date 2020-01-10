@@ -2,10 +2,7 @@ package main
 
 import (
     "fmt"
-    //"io/ioutil"
-    //"strings"
     "strconv"
-    //"math"
 )
 
 func check(e error) {
@@ -25,11 +22,17 @@ func main() {
         string_max := len(value_string)
 
         adjacent := false
+        var adjacent_check byte
         decrease := false
         for j := 0; j < string_max - 1; j++ {
-            if value_string[j] == value_string[j+1] {
-                adjacent = true
+            if adjacent_check == byte(0) || adjacent_check != value_string[j] {
+                if value_string[j] == value_string[j+1] && ((j == (string_max - 2)) || value_string[j+1] != value_string[j+2]) {
+                    adjacent = true
+                }
+
+                adjacent_check = value_string[j]
             }
+            
 
             value_a, err := strconv.Atoi(string(value_string[j]))
             check(err)
@@ -44,6 +47,8 @@ func main() {
         }
 
         if adjacent && !decrease {
+            fmt.Println(i)
+
             passwords++
         }
     }

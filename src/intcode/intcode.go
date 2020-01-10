@@ -3,6 +3,7 @@ package intcode
 import (
     "fmt"
     "strconv"
+    "regexp"
 )
 
 func check(e error) {
@@ -12,8 +13,7 @@ func check(e error) {
 }
 
 func Run_computer(codes []int, input int) int {
-    var parameter_modes [3]int
-    var instruction int
+    regex := *regexp.MustCompile(`(?s)^(\d{0,1}?)(\d{0,1}?)(\d{0,1}?)(\d{1,2})$`)
 
     i := 0
 
@@ -21,29 +21,7 @@ func Run_computer(codes []int, input int) int {
         fmt.Printf("%d - %d\n", i, codes[i]);
 
         // parse the code for parameter mode
-        opcode_string := strconv.Itoa(codes[i])
-        if(len(opcode_string) > 2) {
-            if(len(opcode_string) == 3) {
-                opcode_string = "00" + opcode_string
-            } else if(len(opcode_string) == 4) {
-                opcode_string = "0" + opcode_string
-            }
-
-            value, err := strconv.Atoi(opcode_string[len(opcode_string)-2:])
-            check(err)
-            instruction = value
-
-            for j := 0; j<3; j++ {
-                value, err := strconv.Atoi(string(opcode_string[j]))
-                check(err)
-
-                parameter_modes[2-j] = value
-            }
-        } else {
-            instruction = codes[i]
-
-            parameter_modes = [3]int{0, 0, 0}
-        }
+        instruction, parameter_modes := parse_opcode(codes[i], regex)
 
         switch instruction {
             case 99:
@@ -109,6 +87,28 @@ func Run_computer(codes []int, input int) int {
     }
 
     return codes[0]
+}
+
+func parse_opcode(opcode int, regex regexp.Regexp) (int, [3]int) {
+    var parameter_modes [3]int
+    var instruction int
+
+    opcode_string := strconv.Itoa(opcode)
+    opcode_parts := regex.FindStringSubmatch(opcode_string)
+    instruction, _ = strconv.Atoi(string(opcode_parts[4]))
+
+    for j := 1; j<4; j++ {
+        if(opcode_parts[j] == "") {
+            opcode_parts[j] = "0"
+        }
+
+        value, err := strconv.Atoi(string(opcode_parts[j]))
+        check(err)
+
+        parameter_modes[3-j] = value
+    }
+
+    return instruction, parameter_modes
 }
 
 func parameter_check(codes []int, parameter_count int, parameter_modes [3]int, pointer int) ([]int) {
