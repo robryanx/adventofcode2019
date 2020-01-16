@@ -4,7 +4,7 @@ import (
     "fmt"
     "errors"
     "strings"
-    "readinput"
+    "adventofcode/2019/modules/readinput"
 )
 
 type Node struct {

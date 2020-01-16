@@ -5,7 +5,7 @@ import (
     "strings"
     "strconv"
     "math"
-    "readinput"
+    "adventofcode/2019/modules/readinput"
 )
 
 func check(e error) {

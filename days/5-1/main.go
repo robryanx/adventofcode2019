@@ -1,8 +1,8 @@
 package main
 
 import (
-    "readinput"
-    "intcode"
+    "adventofcode/2019/modules/readinput"
+    "adventofcode/2019/modules/intcode"
 )
 
 func check(e error) {

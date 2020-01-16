@@ -3,7 +3,7 @@ package main
 import (
     "fmt"
     "math"
-    "readinput"
+    "adventofcode/2019/modules/readinput"
 )
 
 func main() {

@@ -2,8 +2,8 @@ package main
 
 import (
     "fmt"
-    "readinput"
-    "intcode"
+    "adventofcode/2019/modules/readinput"
+    "adventofcode/2019/modules/intcode"
 )
 
 func main() {
