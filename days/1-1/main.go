@@ -14,7 +14,7 @@ func check(e error) {
 
 func main() {
     total := 0
-    for _, mass := range readinput.ReadFloats("../inputs/1/input.txt", "\n") {
+    for _, mass := range readinput.ReadFloats("inputs/1/input.txt", "\n") {
         total += int(math.Floor(mass / 3.0)) - 2
     }
 

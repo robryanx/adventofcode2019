@@ -48,7 +48,8 @@ func ReadFloats(file string, delim string) []float64 {
 }
 
 func Read(file string, delim string, iterator Iterator) {
-	bytes, _ := ioutil.ReadFile(file)
+	bytes, err := ioutil.ReadFile(file)
+	check(err)
 
 	for _, row := range strings.Split(string(bytes), delim) {
 		iterator(row)

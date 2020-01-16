@@ -34,7 +34,7 @@ func main() {
 func build_tree() ([]*Node) {
 	var node_list []*Node
 
-    for _, association := range readinput.ReadStrings("../inputs/6/input.txt", "\n") {
+    for _, association := range readinput.ReadStrings("inputs/6/input.txt", "\n") {
     	association_part := strings.Split(association, ")")
 
     	current_node, err := node_exists(node_list, association_part[0])

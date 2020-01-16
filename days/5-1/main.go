@@ -12,7 +12,7 @@ func check(e error) {
 }
 
 func main() {
-    opcodes := readinput.ReadInts("../inputs/5/input.txt", ",")
+    opcodes := readinput.ReadInts("inputs/5/input.txt", ",")
 
-    intcode.Run_computer(opcodes, 1)
+    intcode.Run_computer(opcodes, []int{1})
 }

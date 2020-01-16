@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-    opcodes := readinput.ReadInts("../inputs/5/input.txt", ",")
+    opcodes := readinput.ReadInts("inputs/5/input.txt", ",")
 
-    intcode.Run_computer(opcodes, 5)
+    intcode.Run_computer(opcodes, []int{5})
 }

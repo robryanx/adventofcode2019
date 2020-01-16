@@ -12,10 +12,12 @@ func check(e error) {
     }
 }
 
-func Run_computer(codes []int, input int) int {
+func Run_computer(codes []int, input []int) int {
     regex := *regexp.MustCompile(`(?s)^(\d{0,1}?)(\d{0,1}?)(\d{0,1}?)(\d{1,2})$`)
 
     i := 0
+    input_count := 0
+    var output *int
 
     opcode_loop:for {
         fmt.Printf("%d - %d\n", i, codes[i]);
@@ -25,6 +27,10 @@ func Run_computer(codes []int, input int) int {
 
         switch instruction {
             case 99:
+                if output == nil {
+                    output = &codes[0]
+                }
+
                 break opcode_loop;
             case 1:
                 parameters := parameter_check(codes, 2, parameter_modes, i)
@@ -37,12 +43,14 @@ func Run_computer(codes []int, input int) int {
                 codes[codes[i+3]] = parameters[0] * parameters[1]
                 i += 4
             case 3:
-                codes[codes[i+1]] = input
+                codes[codes[i+1]] = input[input_count]
                 i += 2
+                input_count++
             case 4:
                 parameters := parameter_check(codes, 1, parameter_modes, i)
 
                 fmt.Println(parameters[0])
+                output = &parameters[0]
                 i += 2
             case 5:
                 parameters := parameter_check(codes, 2, parameter_modes, i)
@@ -86,7 +94,7 @@ func Run_computer(codes []int, input int) int {
         }
     }
 
-    return codes[0]
+    return *output
 }
 
 func parse_opcode(opcode int, regex regexp.Regexp) (int, [3]int) {

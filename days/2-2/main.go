@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-    opcodes := readinput.ReadInts("../inputs/2/input.txt", ",")
+    opcodes := readinput.ReadInts("inputs/2/input.txt", ",")
 
     answer := 0
     goal := 19690720
@@ -20,7 +20,7 @@ func main() {
             run_opcodes := make([]int, len(opcodes))
             copy(run_opcodes, opcodes)
 
-            if goal == intcode.Run_computer(run_opcodes, 0) {
+            if goal == intcode.Run_computer(run_opcodes, []int{0}) {
                 answer = (i*100) + j
             }
         }

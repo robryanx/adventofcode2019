@@ -8,7 +8,7 @@ import (
 
 func main() {
     total := 0;
-    for _, mass := range readinput.ReadInts("../inputs/1/input.txt", "\n") {
+    for _, mass := range readinput.ReadInts("inputs/1/input.txt", "\n") {
         if mass > 0 {
             total += calculate_fuel(mass)
         }

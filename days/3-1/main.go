@@ -15,7 +15,7 @@ func check(e error) {
 }
 
 func main() {
-    paths_str := readinput.ReadStrings("../inputs/3/input.txt", "\n")
+    paths_str := readinput.ReadStrings("inputs/3/input.txt", "\n")
     paths := make([][][2]int, len(paths_str))
 
     for i := range paths_str {
