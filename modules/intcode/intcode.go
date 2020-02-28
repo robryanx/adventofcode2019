@@ -4,6 +4,7 @@ import (
     "fmt"
     "strconv"
     "regexp"
+    "strings"
 )
 
 func check(e error) {
@@ -12,65 +13,74 @@ func check(e error) {
     }
 }
 
-func Run_computer(codes []int, input []int) int {
+func Run_computer(computer_id int, codes []int, input <-chan int, result chan<- int, exit chan<- int) {
     regex := *regexp.MustCompile(`(?s)^(\d{0,1}?)(\d{0,1}?)(\d{0,1}?)(\d{1,2})$`)
 
     i := 0
-    input_count := 0
-    var output *int
+    no_output := true
+    last_output := -1
+
+    instruction_length := map[int]int {
+        99: 0,
+        1: 2,
+        2: 2,
+        3: 0,
+        4: 1,
+        5: 2,
+        6: 2,
+        7: 2,
+        8: 2,
+    }
 
     opcode_loop:for {
-        fmt.Printf("%d - %d\n", i, codes[i]);
-
         // parse the code for parameter mode
         instruction, parameter_modes := parse_opcode(codes[i], regex)
 
+        parameters, base_parameters := parameter_check(codes, instruction_length[instruction], parameter_modes, i)
+
+        output_position := 0
+        if i+instruction_length[instruction]+1 < len(codes) - 1 {
+            output_position = codes[i+instruction_length[instruction]+1]
+        }
+
+        output_instruction(computer_id, i, output_position, instruction, parameter_modes, base_parameters, parameters)
+
         switch instruction {
             case 99:
-                if output == nil {
-                    output = &codes[0]
+                if(no_output) {
+                    result <- codes[0]
                 }
+                exit <- last_output
 
                 break opcode_loop;
             case 1:
-                parameters := parameter_check(codes, 2, parameter_modes, i)
-
                 codes[codes[i+3]] = parameters[0] + parameters[1]
                 i += 4
             case 2:
-                parameters := parameter_check(codes, 2, parameter_modes, i)
-
                 codes[codes[i+3]] = parameters[0] * parameters[1]
                 i += 4
             case 3:
-                codes[codes[i+1]] = input[input_count]
+                codes[codes[i+1]] = <- input
                 i += 2
-                input_count++
             case 4:
-                parameters := parameter_check(codes, 1, parameter_modes, i)
-
                 fmt.Println(parameters[0])
-                output = &parameters[0]
+                last_output = parameters[0]
+                result <- parameters[0]
+                no_output = false
                 i += 2
             case 5:
-                parameters := parameter_check(codes, 2, parameter_modes, i)
-
                 if(parameters[0] != 0) {
                     i = parameters[1]
                 } else {
                     i += 3
                 }
             case 6:
-                parameters := parameter_check(codes, 2, parameter_modes, i)
-
                 if(parameters[0] == 0) {
                     i = parameters[1]
                 } else {
                     i += 3
                 }
             case 7:
-                parameters := parameter_check(codes, 2, parameter_modes, i)
-
                 if(parameters[0] < parameters[1]) {
                     codes[codes[i+3]] = 1
                 } else {
@@ -79,8 +89,6 @@ func Run_computer(codes []int, input []int) int {
 
                 i += 4
             case 8:
-                parameters := parameter_check(codes, 2, parameter_modes, i)
-
                 if(parameters[0] == parameters[1]) {
                     codes[codes[i+3]] = 1
                 } else {
@@ -93,8 +101,6 @@ func Run_computer(codes []int, input []int) int {
                 break opcode_loop;
         }
     }
-
-    return *output
 }
 
 func parse_opcode(opcode int, regex regexp.Regexp) (int, [3]int) {
@@ -119,8 +125,9 @@ func parse_opcode(opcode int, regex regexp.Regexp) (int, [3]int) {
     return instruction, parameter_modes
 }
 
-func parameter_check(codes []int, parameter_count int, parameter_modes [3]int, pointer int) ([]int) {
+func parameter_check(codes []int, parameter_count int, parameter_modes [3]int, pointer int) ([]int, []int) {
     parameters := make([]int, parameter_count)
+    base_parameters := make([]int, parameter_count)
 
     for i := 0; i<parameter_count; i++ {
         if parameter_modes[i] == 0 {
@@ -128,7 +135,22 @@ func parameter_check(codes []int, parameter_count int, parameter_modes [3]int, p
         } else {
             parameters[i] = codes[pointer+i+1]
         }
+
+        base_parameters[i] = codes[pointer+i+1]
     }
 
-    return parameters
+    return parameters, base_parameters
+}
+
+func output_instruction(computer_id int, position int, output_position int, instruction int, parameter_modes [3]int, base_parameters []int, parameters []int) {
+    instruction_parts := []string{}
+    for i := range base_parameters {
+        if parameter_modes[2-i] == 0 {
+            instruction_parts = append(instruction_parts, fmt.Sprintf("&%v (%v)", base_parameters[i], parameters[i]))
+        } else {
+            instruction_parts = append(instruction_parts, fmt.Sprintf("%v", base_parameters[i]))
+        }
+    }
+
+    fmt.Printf("%v - pos: %v, out pos: %v, inst %v: %v\n", computer_id, position, output_position, instruction, strings.Join(instruction_parts, ", "))
 }

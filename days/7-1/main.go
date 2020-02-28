@@ -26,9 +26,22 @@ func main() {
 func run_combination(opcodes []int, phases []int) int {
 	output := 0
 
-	for i := range phases {
-		output = intcode.Run_computer(opcodes, []int{phases[i], output})
-	}
+    for i := range phases {
+        input := make(chan int)
+        result := make(chan int)
+        exit := make(chan int)
+
+        run_opcodes := make([]int, len(opcodes))
+        copy(run_opcodes, opcodes)
+
+        go intcode.Run_computer(i, run_opcodes, input, result, exit)
+        input <- phases[i]
+        input <- output
+
+        output = <- result
+
+        <-exit
+    }
 
 	return output
 }

@@ -20,7 +20,13 @@ func main() {
             run_opcodes := make([]int, len(opcodes))
             copy(run_opcodes, opcodes)
 
-            if goal == intcode.Run_computer(run_opcodes, []int{0}) {
+            input := make(chan int)
+            result := make(chan int)
+            exit := make(chan int)
+
+            go intcode.Run_computer(0, run_opcodes, input, result, exit)
+
+            if goal == <-result {
                 answer = (i*100) + j
             }
         }

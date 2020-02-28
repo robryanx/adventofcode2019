@@ -5,14 +5,15 @@ import (
     "adventofcode/2019/modules/intcode"
 )
 
-func check(e error) {
-    if e != nil {
-        panic(e)
-    }
-}
-
 func main() {
     opcodes := readinput.ReadInts("inputs/5/input.txt", ",")
 
-    intcode.Run_computer(opcodes, []int{1})
+    input := make(chan int)
+    result := make(chan int)
+    exit := make(chan int)
+
+    go intcode.Run_computer(0, opcodes, input, result, exit)
+    input <- 1
+
+    <- exit
 }

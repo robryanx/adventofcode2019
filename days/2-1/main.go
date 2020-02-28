@@ -12,7 +12,11 @@ func main() {
     opcodes[1] = 12
     opcodes[2] = 2
 
-    result := intcode.Run_computer(opcodes, []int{0})
+    input := make(chan int)
+    result := make(chan int)
+    exit := make(chan int)
 
-    fmt.Printf("%d\n", result);
+    go intcode.Run_computer(0, opcodes, input, result, exit)
+
+    fmt.Printf("%d\n", <-result);
 }

@@ -12,7 +12,9 @@ func main() {
 
     largest_signal := 0
 
-    for phases := range permutations.Generate([]int{5, 6, 7, 8, 9}){
+    series := []int{9, 8, 7, 6, 5}
+
+    for phases := range permutations.Generate(series){
         signal := run_combination(opcodes, phases)
 
         if signal > largest_signal {
@@ -26,11 +28,38 @@ func main() {
 func run_combination(opcodes []int, phases []int) int {
     output := 0
 
-    fmt.Println(phases)
+    channel := make([]chan int, len(phases))
+    exit := make([]chan int, len(phases))
 
     for i := range phases {
-        output = intcode.Run_computer(opcodes, []int{phases[i], output})
+        exit[i] = make(chan int)
+
+        if i == 0 {
+            channel[len(phases)-1] = make(chan int, 100)
+
+            channel[len(phases)-1] <- phases[i]
+            channel[len(phases)-1] <- 0
+        } else {
+            channel[i-1] = make(chan int, 100)
+
+            channel[i-1] <- phases[i]
+        }
     }
+
+    for i := range phases {
+        run_opcodes := make([]int, len(opcodes))
+        copy(run_opcodes, opcodes)
+
+        if i == 0 {
+            go intcode.Run_computer(i, run_opcodes, channel[len(phases)-1], channel[i], exit[i])
+        } else {
+            go intcode.Run_computer(i, run_opcodes, channel[i-1], channel[i], exit[i])
+        }
+
+        fmt.Println(i)
+    }
+    
+    output = <- exit[4]
 
     return output
 }

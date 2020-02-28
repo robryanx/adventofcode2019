@@ -8,5 +8,12 @@ import (
 func main() {
     opcodes := readinput.ReadInts("inputs/5/input.txt", ",")
 
-    intcode.Run_computer(opcodes, []int{5})
+    input := make(chan int)
+    result := make(chan int)
+    exit := make(chan int)
+
+    go intcode.Run_computer(0, opcodes, input, result, exit)
+    input <- 5
+
+    <- exit
 }
