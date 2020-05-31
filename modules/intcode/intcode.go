@@ -39,12 +39,7 @@ func Run_computer(computer_id int, codes []int, input <-chan int, result chan<- 
         // parse the code for parameter mode
         instruction, parameter_modes := parse_opcode(codes[i], regex)
 
-        parameters, base_parameters := parameter_check(codes, instruction_length[instruction], parameter_modes, i, relative_base)
-
-        output_position := 0
-        if i+instruction_length[instruction]+1 < len(codes) - 1 {
-            output_position = codes[i+instruction_length[instruction]+1]
-        }
+        parameters, base_parameters, output_position := parameter_check(codes, instruction_length[instruction], parameter_modes, i, relative_base)
 
         output_instruction(computer_id, i, output_position, instruction, parameter_modes, base_parameters, parameters)
 
@@ -57,13 +52,13 @@ func Run_computer(computer_id int, codes []int, input <-chan int, result chan<- 
 
                 break opcode_loop;
             case 1:
-                codes[codes[i+3]] = parameters[0] + parameters[1]
+                codes[output_position] = parameters[0] + parameters[1]
                 i += 4
             case 2:
-                codes[codes[i+3]] = parameters[0] * parameters[1]
+                codes[output_position] = parameters[0] * parameters[1]
                 i += 4
             case 3:
-                codes[codes[i+1]] = <- input
+                codes[output_position] = <- input
                 i += 2
             case 4:
                 fmt.Println(parameters[0])
@@ -85,17 +80,17 @@ func Run_computer(computer_id int, codes []int, input <-chan int, result chan<- 
                 }
             case 7:
                 if(parameters[0] < parameters[1]) {
-                    codes[codes[i+3]] = 1
+                    codes[output_position] = 1
                 } else {
-                    codes[codes[i+3]] = 0
+                    codes[output_position] = 0
                 }
 
                 i += 4
             case 8:
                 if(parameters[0] == parameters[1]) {
-                    codes[codes[i+3]] = 1
+                    codes[output_position] = 1
                 } else {
-                    codes[codes[i+3]] = 0
+                    codes[output_position] = 0
                 }
 
                 i += 4
@@ -132,9 +127,10 @@ func parse_opcode(opcode int, regex regexp.Regexp) (int, [3]int) {
     return instruction, parameter_modes
 }
 
-func parameter_check(codes []int, parameter_count int, parameter_modes [3]int, pointer int, relative_base int) ([]int, []int) {
+func parameter_check(codes []int, parameter_count int, parameter_modes [3]int, pointer int, relative_base int) ([]int, []int, int) {
     parameters := make([]int, parameter_count)
     base_parameters := make([]int, parameter_count)
+    output_position := 0
 
     for i := 0; i<parameter_count; i++ {
         if parameter_modes[i] == 0 {
@@ -143,13 +139,20 @@ func parameter_check(codes []int, parameter_count int, parameter_modes [3]int, p
             parameters[i] = codes[pointer+i+1]
         } else {
             parameters[i] = codes[relative_base+codes[pointer+i+1]]
-            fmt.Println(relative_base+codes[pointer+i+1], relative_base, codes[pointer+i+1], parameters[i])
         }
 
         base_parameters[i] = codes[pointer+i+1]
     }
 
-    return parameters, base_parameters
+    if parameter_modes[parameter_count] == 0 {
+        output_position = codes[pointer+parameter_count+1]
+    } else if parameter_modes[parameter_count] == 1 {
+        output_position = pointer+parameter_count+1
+    } else {
+        output_position = relative_base+codes[pointer+parameter_count+1]
+    }
+
+    return parameters, base_parameters, output_position
 }
 
 func output_instruction(computer_id int, position int, output_position int, instruction int, parameter_modes [3]int, base_parameters []int, parameters []int) {

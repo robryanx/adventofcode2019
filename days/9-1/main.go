@@ -1,7 +1,6 @@
 package main
 
 import (
-    //"fmt"
     "adventofcode/2019/modules/readinput"
     "adventofcode/2019/modules/intcode"
 )
