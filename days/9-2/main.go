@@ -1,23 +1,23 @@
 package main
 
 import (
-    "adventofcode/2019/modules/readinput"
-    "adventofcode/2019/modules/intcode"
+	"github.com/robryanx/adventofcode2019/modules/intcode"
+	"github.com/robryanx/adventofcode2019/modules/readinput"
 )
 
 func main() {
-    opcodes := readinput.ReadInts("inputs/9/input.txt", ",")
-    memory := make([]int, 10000)
+	opcodes := readinput.ReadInts("inputs/9/input.txt", ",")
+	memory := make([]int, 10000)
 
-    opcodes = append(opcodes, memory...)
+	opcodes = append(opcodes, memory...)
 
-    input := make(chan int)
-    result := make(chan int, 100)
-    exit := make(chan int)
+	input := make(chan int)
+	result := make(chan int, 100)
+	exit := make(chan int)
 
-    go intcode.Run_computer(0, opcodes, input, result, exit)
+	go intcode.Run_computer(0, opcodes, input, result, exit, false)
 
-    input <- 2
+	input <- 2
 
-    <-exit
+	<-exit
 }

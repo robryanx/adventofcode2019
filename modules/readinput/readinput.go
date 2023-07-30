@@ -1,16 +1,17 @@
 package readinput
 
 import (
-	//"fmt"
-	"io/ioutil"
+	"errors"
+	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
 
 func check(e error) {
-    if e != nil {
-        panic(e)
-    }
+	if e != nil {
+		panic(e)
+	}
 }
 
 type Iterator = func(s string)
@@ -48,7 +49,12 @@ func ReadFloats(file string, delim string) []float64 {
 }
 
 func Read(file string, delim string, iterator Iterator) {
-	bytes, err := ioutil.ReadFile(file)
+	// handle relative import path case
+	if _, err := os.Stat(file); errors.Is(err, os.ErrNotExist) {
+		file = fmt.Sprintf("../../%s", file)
+	}
+
+	bytes, err := os.ReadFile(file)
 	check(err)
 
 	for _, row := range strings.Split(string(bytes), delim) {

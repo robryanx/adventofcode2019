@@ -1,8 +1,9 @@
 package main
 
 import (
-    "fmt"
-    "adventofcode/2019/modules/readinput"
+	"fmt"
+
+	"github.com/robryanx/adventofcode2019/modules/readinput"
 )
 
 func main() {
@@ -21,7 +22,7 @@ func main() {
 
 		if min_count[0] == -1 || count[0] < min_count[0] {
 			min_count = count
-		}	
+		}
 	}
 
 	fmt.Println(min_count[1] * min_count[2])
