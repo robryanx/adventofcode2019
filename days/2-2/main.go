@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/robryanx/adventofcode2019/modules/intcode"
-	"github.com/robryanx/adventofcode2019/modules/readinput"
+	"github.com/robryanx/adventofcode2019/util/intcode"
+	"github.com/robryanx/adventofcode2019/util/readinput"
 )
 
 func main() {

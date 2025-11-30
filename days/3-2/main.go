@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/robryanx/adventofcode2019/modules/readinput"
+	"github.com/robryanx/adventofcode2019/util/readinput"
 )
 
 func check(e error) {
@@ -74,8 +74,8 @@ func main() {
 				if shortest == -1 || total_steps < shortest {
 					shortest = total_steps
 
-					fmt.Println(i)
-					fmt.Println(paths[0][i])
+					// fmt.Println(i)
+					// fmt.Println(paths[0][i])
 				}
 			}
 		}

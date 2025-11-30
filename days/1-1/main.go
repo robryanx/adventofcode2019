@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/robryanx/adventofcode2019/modules/readinput"
+	"github.com/robryanx/adventofcode2019/util/readinput"
 )
 
 func main() {

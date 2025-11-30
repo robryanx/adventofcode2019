@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/robryanx/adventofcode2019/modules/intcode"
-	"github.com/robryanx/adventofcode2019/modules/permutations"
-	"github.com/robryanx/adventofcode2019/modules/readinput"
+	"github.com/robryanx/adventofcode2019/util/intcode"
+	"github.com/robryanx/adventofcode2019/util/permutations"
+	"github.com/robryanx/adventofcode2019/util/readinput"
 )
 
 func main() {
@@ -48,7 +48,7 @@ func run_combination(opcodes []int, phases []int) int {
 	}
 
 	for i := range phases {
-		run_opcodes := make([]int, len(opcodes))
+		run_opcodes := make([]int, len(opcodes)+1000)
 		copy(run_opcodes, opcodes)
 
 		if i == 0 {

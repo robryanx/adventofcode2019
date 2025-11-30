@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/robryanx/adventofcode2019/modules/readinput"
+	"github.com/robryanx/adventofcode2019/util/readinput"
 )
 
 type Node struct {

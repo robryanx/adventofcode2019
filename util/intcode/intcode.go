@@ -62,7 +62,7 @@ opcode_loop:
 			codes[output_position] = <-input
 			i += 2
 		case 4:
-			fmt.Println(parameters[0])
+			// fmt.Println(parameters[0])
 			last_output = parameters[0]
 			result <- parameters[0]
 			no_output = false

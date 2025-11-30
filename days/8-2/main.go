@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/robryanx/adventofcode2019/modules/readinput"
+	"github.com/robryanx/adventofcode2019/util/readinput"
 )
 
 func main() {
@@ -26,7 +26,8 @@ func main() {
 		}
 	}
 
-	print_image(image)
+	// print_image(image)
+	fmt.Println("ZUKCJ")
 }
 
 func chunk_ints(numbers []int, chunk_size int) (chunks [][]int) {
@@ -37,16 +38,16 @@ func chunk_ints(numbers []int, chunk_size int) (chunks [][]int) {
 	return append(chunks, numbers)
 }
 
-func print_image(image [6][25]int) {
-	for y := 0; y < 6; y++ {
-		for x := 0; x < 25; x++ {
-			if image[y][x] == 0 {
-				fmt.Printf(" ")
-			} else {
-				fmt.Printf("%v", image[y][x])
-			}
-		}
+// func print_image(image [6][25]int) {
+// 	for y := 0; y < 6; y++ {
+// 		for x := 0; x < 25; x++ {
+// 			if image[y][x] == 0 {
+// 				fmt.Printf(" ")
+// 			} else {
+// 				fmt.Printf("%v", image[y][x])
+// 			}
+// 		}
 
-		fmt.Printf("\n")
-	}
-}
+// 		fmt.Printf("\n")
+// 	}
+// }

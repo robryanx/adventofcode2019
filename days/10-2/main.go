@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/robryanx/adventofcode2019/modules/readinput"
+	"github.com/robryanx/adventofcode2019/util/readinput"
 )
 
 type position struct {

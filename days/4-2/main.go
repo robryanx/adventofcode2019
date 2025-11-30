@@ -47,7 +47,7 @@ func main() {
         }
 
         if adjacent && !decrease {
-            fmt.Println(i)
+            // fmt.Println(i)
 
             passwords++
         }
